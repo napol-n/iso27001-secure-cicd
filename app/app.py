@@ -1,4 +1,4 @@
-
+API_KEY = "demo-fake-secret-do-not-use"
 import re
 import sys
 from pathlib import Path
