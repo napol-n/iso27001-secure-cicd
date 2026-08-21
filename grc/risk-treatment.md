@@ -80,3 +80,24 @@ credentials are integrated into the source code repository.
 
 Residual risk will be evaluated after the control has been
 implemented and tested.
+
+## Residual Risk Review
+
+After implementation and testing of CTRL-001:
+
+- Inherent Risk Score: 15 — High
+- Residual Risk Score: 10 — High
+- Residual Risk Status: Further treatment recommended
+
+The current control reduces the likelihood of hardcoded credential exposure,
+but additional controls are recommended to further reduce residual risk.
+
+## Additional Treatment Recommendation
+
+To further reduce RISK-001, the following improvements are recommended:
+
+- Deploy a production-grade secret scanning solution.
+- Expand scanning beyond Python files.
+- Scan repository history where appropriate.
+- Add branch protection rules requiring successful security checks before merge.
+- Store application secrets using secure secret-management mechanisms rather than source code.

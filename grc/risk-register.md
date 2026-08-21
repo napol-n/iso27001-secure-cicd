@@ -50,6 +50,38 @@ Risk Score = Likelihood × Impact
 
 ## RISK-001 — Hardcoded Credential Exposure
 
+## Residual Risk Assessment
+
+Following the implementation and testing of CTRL-001 — Automated Secret Detection,
+the likelihood of hardcoded credentials being integrated into the source code
+repository is considered reduced.
+
+**Residual Likelihood:** 2 — Unlikely
+
+**Residual Impact:** 5 — Severe
+
+**Residual Risk Score:** 10
+
+**Residual Risk Rating:** High
+
+### Rationale
+
+CTRL-001 reduces the likelihood of credential exposure by automatically detecting
+a limited set of hardcoded secret patterns during the CI/CD process.
+
+However, the impact remains Severe because successful exposure of a valid
+credential could still result in unauthorized access or service abuse.
+
+The residual risk remains High because the current control has limitations,
+including limited pattern coverage and no Git history scanning.
+
+## Risk Summary
+
+| Risk ID | Risk | Inherent Score | Inherent Rating | Residual Score | Residual Rating |
+|---|---|---:|---|---:|---|
+| RISK-001 | Hardcoded Credential Exposure | 15 | High | 10 | High |  
+
+
 **Affected Assets:**
 
 - AST-001 — Application Source Code
