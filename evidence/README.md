@@ -12,6 +12,7 @@ explicit. Do not publish credentials or raw secret-containing source lines.
 | [Local validation JSON](local-validation.json) | Captured command results, UTC timestamp, source hashes | Reproducible local commands and their actual exit statuses |
 | [Dependency audit JSON](dependency-audit.json) | pip-audit output after pip remediation | Package versions assessed and advisory results at execution time |
 | [pytest XML](pytest.xml) | Actual local pytest JUnit output | Individual test cases and aggregate result |
+| [Hosted run metadata](hosted-run.json) | GitHub API result and selected job-log lines for run 39147547284 | Successful PR execution on Python 3.12.15, tested revision, and uploaded artifact provenance |
 | [Historical successful screenshot](screenshots/01-clean-pipeline-pass.png) | Original image retained without modification; commit b2bc679 | Visible workflow success, corroborated by historical scanner log |
 | [Historical failed screenshot](screenshots/02-secret-detection-fail.png) | Original image retained without modification; commit d16d333 | Visible workflow failure only; no executed jobs returned by API |
 

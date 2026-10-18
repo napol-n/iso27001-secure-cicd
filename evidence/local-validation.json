@@ -165,6 +165,44 @@
       "stdout": "",
       "stderr": "No known vulnerabilities found\n",
       "recorded_at_utc": "2026-10-18T16:58:55.395849+00:00"
+    },
+    {
+      "check": "documentation follow-up links",
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_docs.py"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "Checked 13 Markdown files and 106 local links; errors: 0\n",
+      "stderr": "",
+      "recorded_at_utc": "2026-10-18T17:01:56.741815+00:00"
+    },
+    {
+      "check": "documentation follow-up secret scan",
+      "command": [
+        ".venv/bin/python",
+        "security/secret_scan.py",
+        "."
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "NovaTech Secret Security Scan\nScanned: 26; excluded entries: 8; findings: 0; errors: 0\nSecurity Gate: PASSED\nNo hardcoded secrets detected.\n",
+      "stderr": "",
+      "recorded_at_utc": "2026-10-18T17:01:56.795187+00:00"
+    },
+    {
+      "check": "documentation follow-up whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "recorded_at_utc": "2026-10-18T17:01:56.808112+00:00"
     }
   ],
   "external_link_observations": {

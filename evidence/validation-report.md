@@ -2,7 +2,7 @@
 
 ## Context and provenance
 
-Review date: 2026-10-18 (Asia/Bangkok). Repository baseline:
+Review dates: 2026-10-18–19 (Asia/Bangkok). Repository baseline:
 `ea88e2e558cc9d8ac51d348b428448f46a460a02`. Dedicated branch:
 `audit/secure-cicd-portfolio`. Local execution: macOS arm64, Python 3.13.5,
 isolated virtual environment. CI is configured for Ubuntu 24.04/Python 3.12.
@@ -46,7 +46,24 @@ independent audit. No real credentials were required or committed.
 | External Markdown destinations | HTTP success after redirects | 7 of 9 returned HTTP 200; both ISO pages returned 403 to curl, so automated availability was not established |
 | Whitespace | `git diff --check` exit 0 | Passed |
 | Existing screenshots/demo | No binary/source changes | Verified against baseline |
-| Hosted PR workflow | Successful execution on Ubuntu/Python 3.12 | Pending PR creation at this evidence stage; local success is not hosted evidence |
+| Hosted PR workflow | Successful execution on Ubuntu/Python 3.12 | Run 39147547284 succeeded; Python 3.12.15; 65 tests passed and all security steps/artifact upload succeeded |
+
+## Hosted execution provenance
+
+[PR #2](https://github.com/napol-n/iso27001-secure-cicd/pull/2) uses the dedicated
+audit branch. [Run 39147547284](https://github.com/napol-n/iso27001-secure-cicd/actions/runs/39147547284)
+tested head `a1e113359e41d8af07e038963ee88f8072baab44`; job `117734359008` completed
+successfully at `2026-10-18T17:00:28Z`. The PR event checks out GitHub's test merge
+revision; the recorded head identifies the proposed changes. The log reports 65
+tests passed, no custom secret findings/errors, no known dependency vulnerabilities,
+and 102 valid local links. Bandit completed successfully. Artifact
+`pytest-39147547284-1` (ID `12144260592`) was present and not expired when inspected.
+See [hosted-run.json](hosted-run.json) for API responses and selected actual log
+lines. The local and hosted environments are different and are not conflated.
+
+This run predates the documentation-only follow-up that records it; source/test/
+workflow hashes in the local record still identify the implementation. The latest
+PR check is available on the PR. No automatic merge is enabled by this work.
 
 ## Historical and repository-setting verification
 
@@ -76,7 +93,7 @@ independent audit. No real credentials were required or committed.
 | `grc/control-mapping.md`, `grc/statement-of-applicability.md`, `grc/control-effectiveness.md` | Selected ISO mapping and testable effectiveness criteria |
 | `scripts/check_docs.py` | Offline local Markdown link/fragment/fence validation |
 | `evidence/README.md`, `evidence/test-results.md`, `evidence/validation-report.md` | Evidence index, corrected observations, validation and gaps |
-| `evidence/local-validation.json`, `evidence/dependency-audit.json`, `evidence/pytest.xml` | Actual captured local execution artifacts |
+| `evidence/local-validation.json`, `evidence/dependency-audit.json`, `evidence/pytest.xml`, `evidence/hosted-run.json` | Actual captured local execution artifacts and hosted run provenance |
 
 `app/app.py` and both screenshots are preserved byte-for-byte.
 

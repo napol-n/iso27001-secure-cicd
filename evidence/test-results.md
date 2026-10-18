@@ -84,6 +84,14 @@ time, source hashes, and result streams are in the JSON/XML evidence. Passing ne
 tests mean the underlying gates rejected the input as expected; they do not mean
 that insecure code was accepted.
 
+**Hosted observation:** [PR run 39147547284](https://github.com/napol-n/iso27001-secure-cicd/actions/runs/39147547284)
+tested revision `a1e113359e41d8af07e038963ee88f8072baab44` and completed successfully
+at 2026-10-18T17:00:28Z (2026-10-19 in Bangkok). Its log reports **65 passed in
+0.93s**, Python **3.12.15**, no custom-scanner findings/errors, no known dependency
+vulnerabilities, and 102 valid local links. Bandit and artifact-upload steps also
+succeeded. [API metadata and selected log lines](hosted-run.json) preserve that
+observation; this is separate from the local XML and the historical screenshots.
+
 ## Dependency gate observations
 
 | Case | Expected result | Observed result |

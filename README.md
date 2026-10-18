@@ -166,6 +166,11 @@ Bandit, and actionlint passed. After updating pip, pip-audit reported no known
 vulnerabilities across 34 installed packages. These are dated observations, not
 an assurance that the repository is vulnerability-free.
 
+The [hosted PR run](https://github.com/napol-n/iso27001-secure-cicd/actions/runs/39147547284)
+also passed all 65 tests and security checks on Ubuntu 24.04/Python 3.12.15.
+Its revision, job steps, and artifact metadata are preserved in
+[hosted evidence](evidence/hosted-run.json).
+
 See [test results](evidence/test-results.md) for expected versus observed behavior,
 [validation report](evidence/validation-report.md) for execution context and limitations,
 and the [evidence index](evidence/README.md) for provenance. Automated negative tests
