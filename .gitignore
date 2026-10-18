@@ -16,3 +16,9 @@ venv/
 # IDE
 .vscode/
 .idea/
+
+# Local test and validation output
+.pytest_cache/
+reports/
+.coverage
+htmlcov/

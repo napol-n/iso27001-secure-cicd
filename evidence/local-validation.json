@@ -1,0 +1,230 @@
+{
+  "recorded_at_utc": "2026-10-18T16:58:01.552514+00:00",
+  "system": "Darwin",
+  "machine": "arm64",
+  "python": "3.13.5",
+  "baseline_commit": "ea88e2e558cc9d8ac51d348b428448f46a460a02",
+  "note": "Local working-tree execution. Temporary paths normalized; stdout/stderr otherwise captured. Source hashes bind this record to tested files. Dependency audit JSON is separate.",
+  "sha256": {
+    "security/secret_scan.py": "748808317c82b2065ee1bed90399f6901e23b1f36c1ff9724a229812cfd3f387",
+    "app/app.py": "004356671c1c49bab5f77ad5e25fc56792c2a197cc18f077c8635cc600148447",
+    "tests/test_secret_scan.py": "e3b6dfcf20a90ae8e6eec42f6cab56a1288994ed76f943923189d75beeeab782",
+    "tests/test_security_tools.py": "e4768a0bfcdbb302debb810b9b0f3e69ac9594a9e9891904fb3d1c4bfd6a165c",
+    "scripts/check_docs.py": "275f6f055bdc553a3db44ab260e187e2a01a8c6922410e29b99061ebc9ce329f",
+    "requirements-dev.txt": "99244d43756e9ae65129bed06107582b1e8703a304210cb3ef24da5f311f52b0",
+    "pytest.ini": "c28d7ee43186a578bc0f8867e26fdf7edcb0f1275b12d71d85a20e95a524c4ef",
+    ".github/workflows/security.yml": "2eace848e52bc942db1de33c435cf570098226a014e281803e35fbd9421afc7e",
+    ".github/dependabot.yml": "408abbeb3fb78cce167b200431268e3cc47b40b7b6ba0f158c9a819a571bde99",
+    "evidence/screenshots/01-clean-pipeline-pass.png": "4fb1d6163facbe20aa8b4dd975d76c79418c9ae54026276cfe0f84b7cd3633e9",
+    "evidence/screenshots/02-secret-detection-fail.png": "4960bed3177b14a8ddb00306731e9bd7ea1c0700a2d8c75b1e1fff5d7231d707"
+  },
+  "checks": [
+    {
+      "check": "pytest",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "--junitxml=evidence/pytest.xml"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": ".................................................................        [100%]\n65 passed in 0.44s\n",
+      "stderr": ""
+    },
+    {
+      "check": "current-tree secret scan",
+      "command": [
+        ".venv/bin/python",
+        "security/secret_scan.py",
+        "."
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "NovaTech Secret Security Scan\nScanned: 25; excluded entries: 8; findings: 0; errors: 0\nSecurity Gate: PASSED\nNo hardcoded secrets detected.\n",
+      "stderr": ""
+    },
+    {
+      "check": "default app scan",
+      "command": [
+        ".venv/bin/python",
+        "security/secret_scan.py"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "NovaTech Secret Security Scan\nScanned: 1; excluded entries: 0; findings: 0; errors: 0\nSecurity Gate: PASSED\nNo hardcoded secrets detected.\n",
+      "stderr": ""
+    },
+    {
+      "check": "original unchanged demo",
+      "command": [
+        ".venv/bin/python",
+        "app/app.py"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "================================\n NovaTech Secret Security Scan\n================================\n\n\nSecurity Gate: PASSED\nNo hardcoded secrets detected.\n",
+      "stderr": ""
+    },
+    {
+      "check": "Bandit SAST",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "bandit",
+        "-r",
+        "app",
+        "security",
+        "scripts",
+        "--ignore-nosec",
+        "--format",
+        "custom",
+        "--msg-template",
+        "{relpath}:{line} {test_id} {severity} {confidence}"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "",
+      "stderr": "[main]\tINFO\tprofile include tests: None\n[main]\tINFO\tprofile exclude tests: None\n[main]\tINFO\tcli include tests: None\n[main]\tINFO\tcli exclude tests: None\n[main]\tINFO\trunning on Python 3.13.5\n"
+    },
+    {
+      "check": "actionlint",
+      "command": [
+        "/tmp/iso-actionlint/actionlint",
+        ".github/workflows/security.yml"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "Markdown local links and fences",
+      "command": [
+        ".venv/bin/python",
+        "scripts/check_docs.py"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "Checked 13 Markdown files and 102 local links; errors: 0\n",
+      "stderr": ""
+    },
+    {
+      "check": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "check": "synthetic secret rejection",
+      "command": [
+        ".venv/bin/python",
+        "security/secret_scan.py",
+        "<temporary-directory>/synthetic.py"
+      ],
+      "expected_exit": 1,
+      "observed_exit": 1,
+      "stdout": "NovaTech Secret Security Scan\n[HIGH] Potential API Key in '<temporary-directory>/synthetic.py':1 [REDACTED]\nScanned: 1; excluded entries: 0; findings: 1; errors: 0\nSecurity Gate: FAILED\n",
+      "stderr": ""
+    },
+    {
+      "check": "invalid encoding rejection",
+      "command": [
+        ".venv/bin/python",
+        "security/secret_scan.py",
+        "<temporary-directory>/synthetic.py"
+      ],
+      "expected_exit": 2,
+      "observed_exit": 2,
+      "stdout": "NovaTech Secret Security Scan\nScanned: 0; excluded entries: 0; findings: 0; errors: 1\nSecurity Gate: ERROR (scan incomplete)\n",
+      "stderr": "[ERROR] '<temporary-directory>/synthetic.py': file is not UTF-8 text\n"
+    },
+    {
+      "check": "dependency audit after remediation",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pip_audit",
+        "--strict",
+        "--progress-spinner",
+        "off",
+        "--format",
+        "json",
+        "--output",
+        "evidence/dependency-audit.json"
+      ],
+      "expected_exit": 0,
+      "observed_exit": 0,
+      "stdout": "",
+      "stderr": "No known vulnerabilities found\n",
+      "recorded_at_utc": "2026-10-18T16:58:55.395849+00:00"
+    }
+  ],
+  "external_link_observations": {
+    "recorded_at_utc": "2026-10-18T16:59:03.512808+00:00",
+    "results": [
+      {
+        "url": "https://bandit.readthedocs.io/en/latest/man/bandit.html",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://docs.github.com/en/actions/reference/security/secure-use",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://github.com/gitleaks/gitleaks",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://github.com/napol-n/iso27001-secure-cicd/actions/runs/32396024034",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://github.com/napol-n/iso27001-secure-cicd/actions/runs/32397220447",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://github.com/pypa/pip-audit",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://github.com/rhysd/actionlint",
+        "curl_exit": 0,
+        "http_status": "200",
+        "stderr": ""
+      },
+      {
+        "url": "https://www.iso.org/standard/27001",
+        "curl_exit": 0,
+        "http_status": "403",
+        "stderr": ""
+      },
+      {
+        "url": "https://www.iso.org/standard/75652.html",
+        "curl_exit": 0,
+        "http_status": "403",
+        "stderr": ""
+      }
+    ],
+    "note": "GET status after redirects; HTTP failures may reflect access restrictions, not necessarily broken destinations."
+  }
+}
