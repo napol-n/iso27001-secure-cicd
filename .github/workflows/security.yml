@@ -2,29 +2,67 @@ name: Security Pipeline
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  secret-scan:
-    name: Secret Detection
-    runs-on: ubuntu-latest
-
+  security:
+    name: Security checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
-      - name: Display Python version
-        run: python --version
+      - name: Install test and security tools
+        run: python -m pip install -r requirements-dev.txt
 
-      - name: Run secret scanner
-        run: python security/secret_scan.py
+      - name: Automated tests
+        run: python -m pytest -q --junitxml=reports/pytest.xml
+
+      - name: Secret detection
+        if: ${{ !cancelled() }}
+        run: python security/secret_scan.py .
+
+      - name: Python SAST
+        if: ${{ !cancelled() }}
+        # Metadata only: do not echo source lines that might contain credentials.
+        run: >-
+          bandit -r app security scripts --ignore-nosec
+          --format custom --msg-template '{relpath}:{line} {test_id} {severity} {confidence}'
+
+      - name: Dependency vulnerability audit
+        if: ${{ !cancelled() }}
+        # The application uses only stdlib. Audit installed CI tools and transitives.
+        run: python -m pip_audit --strict --progress-spinner off
+
+      - name: Documentation links
+        if: ${{ !cancelled() }}
+        run: python scripts/check_docs.py
+
+      - name: Preserve test evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pytest-${{ github.run_id }}-${{ github.run_attempt }}
+          path: reports/pytest.xml
+          if-no-files-found: error
+          retention-days: 14
